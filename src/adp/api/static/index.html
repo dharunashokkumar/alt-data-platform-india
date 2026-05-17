@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alternative Data Platform — Indian Equities</title>
+<meta name="description" content="Reading India's physical economy — power, freight, trade — for equity signals, point-in-time correct." />
+<link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+
+<!-- ===== Masthead ===================================================== -->
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand">
+      <span class="kicker">Alternative Data Platform · Indian Equities</span>
+      <h1>Reading the physical economy<br />before the financials catch up.</h1>
+      <p class="standfirst">
+        When factories run, they draw power; when goods move, trains and ports
+        register it. That activity is visible weeks before it lands in a
+        quarterly result. This platform turns those public physical-economy
+        records into a tradable signal &mdash; and proves out the idea on
+        history, <strong>without ever peeking at the future</strong>.
+      </p>
+    </div>
+    <div class="status" id="status">
+      <span class="dot" data-state="unknown"></span>
+      <span class="status-text">checking the platform&hellip;</span>
+    </div>
+  </div>
+  <nav class="sectionnav wrap" aria-label="Sections">
+    <a href="#signals">Signals</a>
+    <a href="#backtest">Backtest</a>
+    <a href="#universe">Universe</a>
+    <a href="#features">Feature explorer</a>
+    <a href="#read">How to read this</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <!-- ===== Signals =================================================== -->
+  <section id="signals">
+    <div class="sec-head">
+      <h2>Today's signal</h2>
+      <p class="lede">
+        Every stock in the universe gets one number from the chosen factor.
+        A higher number means the physical activity behind that company is
+        accelerating; a lower (or negative) number means it is slowing.
+        The list is ranked &mdash; the strategy buys the top names and sells
+        the bottom ones.
+      </p>
+    </div>
+
+    <form class="controls" id="signals-controls" autocomplete="off">
+      <label>
+        <span>Factor</span>
+        <select id="sig-factor"></select>
+      </label>
+      <label>
+        <span>As of</span>
+        <input type="date" id="sig-asof" />
+      </label>
+      <button type="submit">Update</button>
+      <p class="control-note">
+        &ldquo;As of&rdquo; is a time machine: you only see data that was
+        actually published on or before that date.
+      </p>
+    </form>
+
+    <div id="signals-out" class="block" aria-live="polite"></div>
+  </section>
+
+  <!-- ===== Backtest ================================================== -->
+  <section id="backtest">
+    <div class="sec-head">
+      <h2>Did the idea actually work?</h2>
+      <p class="lede">
+        We replay history one month at a time. On each date the strategy may
+        only use information that was public then &mdash; so the result below
+        is what you would genuinely have earned, not hindsight.
+      </p>
+    </div>
+
+    <form class="controls" id="bt-controls" autocomplete="off">
+      <label>
+        <span>Factor</span>
+        <select id="bt-factor"></select>
+      </label>
+      <label>
+        <span>Start</span>
+        <input type="date" id="bt-start" />
+      </label>
+      <label>
+        <span>End</span>
+        <input type="date" id="bt-end" />
+      </label>
+      <button type="submit" id="bt-run">Run backtest</button>
+      <p class="control-note">
+        Runs live and fetches prices, so it takes a few seconds.
+      </p>
+    </form>
+
+    <div id="backtest-out" class="block" aria-live="polite"></div>
+  </section>
+
+  <!-- ===== Universe ================================================= -->
+  <section id="universe">
+    <div class="sec-head">
+      <h2>The universe</h2>
+      <p class="lede">
+        The companies the strategy can trade. Each is tied to a state, which
+        is how a state-level power or freight reading becomes a
+        company-level signal.
+      </p>
+    </div>
+
+    <form class="controls" id="uni-controls" autocomplete="off">
+      <label class="grow">
+        <span>Filter</span>
+        <input type="search" id="uni-q" placeholder="ticker, company, sector or state&hellip;" />
+      </label>
+    </form>
+
+    <div id="universe-out" class="block" aria-live="polite"></div>
+  </section>
+
+  <!-- ===== Feature explorer ======================================== -->
+  <section id="features">
+    <div class="sec-head">
+      <h2>Feature explorer</h2>
+      <p class="lede">
+        The raw rows behind the signal. Each row carries three dates &mdash;
+        this triplet is the whole point of the platform and is explained
+        below the table.
+      </p>
+    </div>
+
+    <form class="controls" id="feat-controls" autocomplete="off">
+      <label>
+        <span>As of</span>
+        <input type="date" id="feat-asof" />
+      </label>
+      <label>
+        <span>Feature</span>
+        <input type="text" id="feat-name" placeholder="posoco_industrial_yoy" />
+      </label>
+      <label>
+        <span>Ticker</span>
+        <input type="text" id="feat-ticker" placeholder="any" />
+      </label>
+      <label class="narrow">
+        <span>Limit</span>
+        <input type="number" id="feat-limit" value="100" min="1" max="5000" />
+      </label>
+      <button type="submit">Fetch rows</button>
+    </form>
+
+    <div id="features-out" class="block" aria-live="polite"></div>
+
+    <aside class="note">
+      <h3>The three dates, in plain words</h3>
+      <dl>
+        <dt>feature&nbsp;date</dt>
+        <dd>the day the measurement is <em>about</em>.</dd>
+        <dt>published&nbsp;date</dt>
+        <dd>the day that measurement first became public. The backtest is
+            only allowed to use a row once this day has passed.</dd>
+        <dt>as-of&nbsp;date</dt>
+        <dd>the day our pipeline computed and stored it.</dd>
+      </dl>
+      <p>
+        Keeping these apart is what stops a strategy from &ldquo;knowing&rdquo;
+        a number before the world did &mdash; the single most common way
+        backtests lie.
+      </p>
+    </aside>
+  </section>
+
+  <!-- ===== How to read this ======================================== -->
+  <section id="read">
+    <div class="sec-head"><h2>How to read this</h2></div>
+    <dl class="glossary">
+      <dt>Factor</dt>
+      <dd>A recipe that turns raw physical data into one comparable number
+          per company (e.g. year-on-year change in industrial power use).</dd>
+      <dt>Point-in-time</dt>
+      <dd>Every read is filtered to what was public at a chosen date, so a
+          backtest cannot accidentally use the future.</dd>
+      <dt>Long / short</dt>
+      <dd>Buy the strongest names, sell the weakest. Returns come from the
+          gap between them, not the market's overall direction.</dd>
+      <dt>CAGR</dt>
+      <dd>The smoothed annual growth rate of the strategy. <em>Net</em> is
+          after trading costs; <em>gross</em> is before.</dd>
+      <dt>Sharpe</dt>
+      <dd>Return earned per unit of bumpiness. Higher is steadier. Roughly:
+          below&nbsp;1 is weak, around&nbsp;1 is decent, above&nbsp;2 is strong.</dd>
+      <dt>Information Coefficient (IC)</dt>
+      <dd>How well the signal's ranking lined up with what actually happened
+          next, period by period. Small but consistently positive is good;
+          the t-stat says whether it is more than luck.</dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Alternative Data Platform · served live by the platform's own API ·
+     <a href="/docs">API reference</a></p>
+</footer>
+
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

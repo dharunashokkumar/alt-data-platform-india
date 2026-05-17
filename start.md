@@ -120,10 +120,45 @@ python -m flows.posoco_flow --start <START> --end <END>
 
 | Service | URL | Credentials |
 |---------|-----|-------------|
+| **Dashboard** | **http://127.0.0.1:8000** | — start here; the human-facing UI |
 | API (Swagger) | http://127.0.0.1:8000/docs | — (see §8 localhost note) |
 | MinIO console | http://localhost:9001 | `minioadmin` / `minioadmin` |
 | Prefect UI | http://localhost:4200 | — |
 | Grafana | http://localhost:3000 | anonymous enabled; admin `admin` / `admin` |
+
+### Applying code or dashboard changes (important)
+
+The `api` container **copies `src/` into its image at build time** — it has no
+live source mount. So `docker compose up -d` keeps serving the *old* code/UI
+until you rebuild. **This applies to every change inside `src/`**, including:
+
+- Python code — e.g. API endpoints in `src/adp/api/main.py`, or anything in
+  `src/adp/**` (sources, features, backtest, core).
+- Dashboard files — `src/adp/api/static/` (`index.html`, `styles.css`,
+  `app.js`).
+
+Any such change requires rebuilding just that one service before it takes
+effect:
+
+```powershell
+docker compose up -d --build api
+```
+
+What the command does:
+
+| part | meaning |
+|------|---------|
+| `docker compose` | drive the services defined in `docker-compose.yml` |
+| `up -d` | (re)create + start containers, detached (background) |
+| `--build` | rebuild the image first instead of reusing the cached one |
+| `api` | only the `api` service — leaves db / minio / prefect untouched |
+
+For a fast edit→refresh loop while developing, skip Docker for the app and run
+it directly (auto-reloads on save, no rebuild needed):
+
+```powershell
+uvicorn adp.api.main:app --host 127.0.0.1 --port 8000 --reload
+```
 
 ---
 
@@ -131,6 +166,9 @@ python -m flows.posoco_flow --start <START> --end <END>
 
 - **API unreachable at `localhost:8000`** → Windows resolves `localhost` to
   IPv6 `::1` but uvicorn binds IPv4. Use **`http://127.0.0.1:8000`**.
+- **Dashboard / API returns `{"detail":"Not Found"}` or stale behaviour after
+  a code change** → the container is running an old image. Rebuild it — see
+  **§7 → "Applying code or dashboard changes"**.
 - **YoY features come out empty** for a short date window → the feature
   lookback (`adp.features.compute._LOOKBACK`, currently 430d) must cover
   365 + rolling window + slack. Request a wider `--start`/`--end` range

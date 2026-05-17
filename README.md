@@ -48,7 +48,10 @@ Live POSOCO instead of the sample: leave `ADP_POSOCO_LOCAL_DIR` unset and
 verify `ADP_POSOCO_REPORT_URL_TEMPLATE` against the current Grid-India site
 (this is the one acknowledged spot needing live verification — see ROADMAP).
 
-Services: API `http://localhost:8000/docs` · MinIO `:9001` · Prefect `:4200`
+Dashboard (start here): **`http://127.0.0.1:8000`** — a clean, self-explaining
+UI for signals, backtests and the universe, served by the API itself.
+
+Services: API `http://127.0.0.1:8000/docs` · MinIO `:9001` · Prefect `:4200`
 · Grafana `:3000` (anon).
 
 ## Add a data source
