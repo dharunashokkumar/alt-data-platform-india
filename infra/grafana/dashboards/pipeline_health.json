@@ -1,0 +1,45 @@
+{
+  "uid": "adp-pipeline-health",
+  "title": "ADP Pipeline Health",
+  "schemaVersion": 39,
+  "version": 1,
+  "time": { "from": "now-90d", "to": "now" },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Silver rows by source",
+      "datasource": { "type": "postgres", "uid": "ADP-Postgres" },
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "rawSql": "SELECT source, count(*) AS value FROM silver_observations GROUP BY source",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Last successful ingest (max observation_date)",
+      "datasource": { "type": "postgres", "uid": "ADP-Postgres" },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "rawSql": "SELECT source, max(observation_date) AS value FROM silver_observations GROUP BY source",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Gold feature rows per day",
+      "datasource": { "type": "postgres", "uid": "ADP-Postgres" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
+      "targets": [
+        {
+          "rawSql": "SELECT feature_date AS time, feature_name AS metric, count(*) AS value FROM features GROUP BY feature_date, feature_name ORDER BY 1",
+          "format": "time_series"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+# Maps the state labels as they appear in POSOCO/Grid-India PSP reports to the
+# canonical `state` values used in the `universe` table. This decouples the
+# (volatile) report wording from our entity model — fix mismatches here, never
+# in code.
+aliases:
+  Maharashtra: Maharashtra
+  Gujarat: Gujarat
+  "Madhya Pradesh": Madhya Pradesh
+  Chhattisgarh: Chhattisgarh
+  Chattisgarh: Chhattisgarh          # common report misspelling
+  Goa: Goa
+  "DD": Gujarat                      # Daman & Diu industrial belt -> Gujarat proxy
+  Rajasthan: Rajasthan
+  "Tamil Nadu": Tamil Nadu
+  TamilNadu: Tamil Nadu
+  Karnataka: Karnataka
+  "Andhra Pradesh": Andhra Pradesh
+  Telangana: Telangana
+  Kerala: Kerala
+  Pondy: Tamil Nadu
+  Puducherry: Tamil Nadu
+  Haryana: Haryana
+  Punjab: Punjab
+  Delhi: Delhi
+  "Uttar Pradesh": Uttar Pradesh
+  Uttarakhand: Uttarakhand
+  "Himachal Pradesh": Himachal Pradesh
+  "J&K": Jammu & Kashmir
+  Bihar: Bihar
+  Jharkhand: Jharkhand
+  Odisha: Odisha
+  "West Bengal": West Bengal
+  "WB": West Bengal
+  Sikkim: Sikkim
