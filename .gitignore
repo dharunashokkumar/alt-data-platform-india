@@ -9,3 +9,6 @@ build/
 *.egg-info/
 data/
 .ipynb_checkpoints/
+
+Screenshot*.png
+.claude/settings.local.json
