@@ -25,8 +25,8 @@ no backtest can ever see unpublished data.
 | # | Source | Status | Cadence | Granularity | Key libs | Hardest part |
 |---|--------|--------|---------|-------------|----------|--------------|
 | 1 | **POSOCO power demand** | ✅ DONE (reference slice) | Daily | State | pdfplumber | Company mapping → state-level only |
-| 2 | GST e-way bill | ⬜ TODO | Monthly | Industry (HSN) | camelot-py, requests | Messy PDF tables; HSN→industry→ticker map |
-| 3 | Indian Railways freight | ⬜ TODO | Monthly | Commodity | pdfplumber/camelot | PDF parse; commodity→consuming-industry map |
+| 2 | **GST e-way bill** | ✅ DONE | Monthly | Industry (HSN) | openpyxl, pdfplumber | Messy XLSX/PDF tables; HSN→industry→ticker map |
+| 3 | **Indian Railways freight** | ✅ DONE | Monthly | Commodity | pdfplumber/camelot | PDF parse; commodity→consuming-industry map |
 | 4 | Indian Ports / DGFT | ⬜ TODO | Monthly | Port / commodity | requests, bs4 | Per-port scraping; port→company map |
 | 5 | Naukri / career-page jobs | ⬜ TODO | Daily/Weekly | Company | scrapy, playwright, spaCy | ToS/legal grey area; JS pages; dedupe |
 | 6 | Satellite imagery | ⬜ TODO (hardest) | ~5-day | Plant | sentinelsat, rasterio, gdal, ultralytics | Cloud cover (monsoon); GPU; plant geocoords |
@@ -58,8 +58,10 @@ no backtest can ever see unpublished data.
       feature store, registry, docker-compose, migrations, CI.
 - [x] **Phase 1** — POSOCO vertical slice end-to-end (ingest → bronze → silver
       → gold → signal → backtest → API → Grafana).
-- [ ] **Phase 2** — Add sources in ROI order: **Railway freight → GST →
-      Ports → Jobs → Satellite** (cheap/structured first, satellite last).
+- [~] **Phase 2** — Add sources in ROI order: Railway freight ✅ → GST ✅ →
+      **Ports → Jobs → Satellite** (cheap/structured first, satellite last).
+      GST + Railway shipped as full vertical slices (monthly cadence, YoY +
+      MoM-accel + composite features, flows, dashboard, multi-factor research).
 - [ ] **Phase 3** — Multi-factor signals: cross-sectional Fama-MacBeth, IC
       decay analysis, ML combine (xgboost/lightgbm) with leak-free CV.
 - [ ] **Phase 4** — Backtest realism: swap `MarketDataProvider` to a paid/

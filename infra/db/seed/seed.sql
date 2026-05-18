@@ -37,3 +37,32 @@ ON CONFLICT (ticker) DO UPDATE
   SET name = EXCLUDED.name,
       sector = EXCLUDED.sector,
       state  = EXCLUDED.state;
+
+-- Universe expansion for the freight/GST verticals (ROADMAP sources #2, #3).
+-- `sector` is the join key for GST e-way bill (HSN->industry->sector) and
+-- railway freight (commodity->consuming-industry->sector). Same idempotent
+-- pattern: widening coverage is a seed row, never a code change.
+INSERT INTO universe (ticker, name, sector, state) VALUES
+  ('NMDC','NMDC','Metals','Chhattisgarh'),
+  ('APLAPOLLO','APL Apollo Tubes','Metals','Uttar Pradesh'),
+  ('JSL','Jindal Stainless','Metals','Odisha'),
+  ('RATNAMANI','Ratnamani Metals & Tubes','Metals','Gujarat'),
+  ('RAMCOCEM','The Ramco Cements','Cement','Tamil Nadu'),
+  ('JKCEMENT','JK Cement','Cement','Rajasthan'),
+  ('NUVOCO','Nuvoco Vistas Corp','Cement','Maharashtra'),
+  ('JSWENERGY','JSW Energy','Power','Maharashtra'),
+  ('COROMANDEL','Coromandel International','Fertilizers','Andhra Pradesh'),
+  ('CHAMBLFERT','Chambal Fertilisers & Chemicals','Fertilizers','Rajasthan'),
+  ('GNFC','Gujarat Narmada Valley Fertilizers','Fertilizers','Gujarat'),
+  ('DEEPAKFERT','Deepak Fertilisers & Petrochemicals','Fertilizers','Maharashtra'),
+  ('CONCOR','Container Corporation of India','Logistics','Haryana'),
+  ('GESHIP','Great Eastern Shipping','Logistics','Maharashtra'),
+  ('IRCTC','Indian Railway Catering & Tourism','Logistics','Delhi'),
+  ('BPCL','Bharat Petroleum','Energy','Maharashtra'),
+  ('IOC','Indian Oil Corp','Energy','Delhi'),
+  ('HINDPETRO','Hindustan Petroleum','Energy','Maharashtra'),
+  ('GUJGASLTD','Gujarat Gas','Energy','Gujarat')
+ON CONFLICT (ticker) DO UPDATE
+  SET name = EXCLUDED.name,
+      sector = EXCLUDED.sector,
+      state  = EXCLUDED.state;

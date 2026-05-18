@@ -3,6 +3,13 @@
    fails locally (an inline message) so a single error never blanks the page. */
 
 const KNOWN_FACTOR = "posoco_industrial_yoy";
+/* Seed list so the dropdowns are useful before any /features call returns.
+   fillFactors() still merges in whatever feature_names actually exist. */
+const KNOWN_FACTORS = [
+  "posoco_industrial_yoy",
+  "gst_eway_composite",
+  "railway_freight_composite",
+];
 
 /* ---------- tiny helpers ------------------------------------------ */
 const $ = (sel) => document.querySelector(sel);
@@ -69,12 +76,12 @@ let DATA_MAX_DATE = null;
 
 /* ---------- factor selects ---------------------------------------- */
 async function fillFactors() {
-  let opts = [KNOWN_FACTOR];
+  let opts = [...KNOWN_FACTORS];
   try {
     const f = await api("/features", { as_of: todayISO(), limit: 5000 });
     const rows = f.rows || [];
     const names = [...new Set(rows.map((r) => r.feature_name))];
-    if (names.length) opts = [...new Set([...names, KNOWN_FACTOR])];
+    if (names.length) opts = [...new Set([...names, ...KNOWN_FACTORS])];
     const dates = rows.map((r) => r.feature_date).filter(Boolean).sort();
     if (dates.length) {
       DATA_MAX_DATE = dates[dates.length - 1];
@@ -165,7 +172,7 @@ async function loadSignals() {
             latestData
           )} to move through history.`
         : ""
-    } This factor reads <em>state-level</em> industrial power demand, so every company in the same state shares the same value.</caption>
+    } These alternative-data factors are <em>basket-level</em> (state or industry), so every company in the same basket shares the value — the honest granularity ceiling, by design.</caption>
         <thead><tr>
           <th>#</th><th>Ticker</th><th>Company</th><th>Sector</th>
           <th>State</th><th class="num">Signal</th><th class="bar-cell">vs&nbsp;peers</th>

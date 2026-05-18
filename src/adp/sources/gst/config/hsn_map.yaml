@@ -1,0 +1,32 @@
+# HSN-commodity label  ->  canonical `universe.sector`.
+#
+# The GSTN e-way-bill statistics report movement by commodity (an HSN-chapter
+# description such as "Iron and Steel" or "Cement"). This file decouples that
+# (volatile) wording from our entity model: matching is case-insensitive
+# substring, longest key wins, so "articles of iron or steel" and "iron and
+# steel" both resolve without code. Fix mismatches HERE, never in the parser.
+#
+# Canonical values MUST exist as a `sector` in the seeded universe, because the
+# feature recipe joins sector -> tickers via core.universe.sector_to_tickers().
+aliases:
+  "iron and steel": Metals
+  "articles of iron or steel": Metals
+  "iron or steel": Metals
+  "aluminium": Metals
+  "copper": Metals
+  "ores, slag and ash": Metals
+  "cement": Cement
+  "articles of cement": Cement
+  "vehicles": Auto
+  "motor vehicles": Auto
+  "vehicles other than railway": Auto
+  "mineral fuels": Energy
+  "mineral fuels, mineral oils": Energy
+  "petroleum": Energy
+  "fertilis": Fertilizers          # fertiliser / fertilizer / fertilisers
+  "organic chemicals": Chemicals
+  "inorganic chemicals": Chemicals
+  "plastics and articles": Chemicals
+  "rubber and articles": Chemicals
+  "paints": Materials
+  "pharmaceutical": Materials

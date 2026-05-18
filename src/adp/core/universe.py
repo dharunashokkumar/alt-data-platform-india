@@ -35,3 +35,14 @@ def state_to_tickers() -> dict[str, list[str]]:
     return {
         st: g["ticker"].tolist() for st, g in u.groupby("state") if st
     }
+
+
+def sector_to_tickers() -> dict[str, list[str]]:
+    """Sector -> tickers. Used by sources whose honest granularity is the
+    industry/sector (GST e-way bill, railway freight): the source's raw label
+    is mapped to a canonical sector in per-source YAML, then to tickers here.
+    Mirrors `state_to_tickers` — coverage grows by seeding rows, not code."""
+    u = load_universe()
+    return {
+        sec: g["ticker"].tolist() for sec, g in u.groupby("sector") if sec
+    }

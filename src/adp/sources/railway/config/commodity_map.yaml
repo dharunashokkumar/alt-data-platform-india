@@ -1,0 +1,25 @@
+# Railway freight commodity label -> the consuming industries (canonical
+# `universe.sector` values). A commodity can feed several industries, so the
+# value is a LIST and the parser fans the tonnage out to each. Matching is
+# case-insensitive substring, longest key first. Fix drift HERE, not in code.
+#
+# Every listed sector MUST exist in the seeded universe (the recipe joins
+# sector -> tickers via core.universe.sector_to_tickers()).
+aliases:
+  "coking coal": [Metals]                  # blast-furnace input -> steel
+  "coal":        [Power]                   # non-coking -> thermal power
+  "coke":        [Metals]
+  "iron ore":    [Metals]
+  "pig iron and finished steel": [Metals]
+  "finished steel": [Metals]
+  "iron and steel": [Metals]
+  "cement":      [Cement]
+  "limestone":   [Cement]
+  "raw material for cement": [Cement]
+  "fertiliser":  [Fertilizers]             # fertiliser / fertilisers
+  "fertilizer":  [Fertilizers]
+  "pol":         [Energy]                  # petroleum, oil & lubricants
+  "petroleum":   [Energy]
+  "container":   [Logistics]
+  "containers":  [Logistics]
+  "foodgrain":   [Logistics]               # bulk movement -> rail logistics

@@ -109,8 +109,9 @@
     <div class="sec-head">
       <h2>The universe</h2>
       <p class="lede">
-        The companies the strategy can trade. Each is tied to a state, which
-        is how a state-level power or freight reading becomes a
+        The companies the strategy can trade. Each is mapped to a state and a
+        sector &mdash; that mapping is how a state-level power reading or an
+        industry-level GST e-way-bill / rail-freight reading becomes a
         company-level signal.
       </p>
     </div>
@@ -143,7 +144,7 @@
       </label>
       <label>
         <span>Feature</span>
-        <input type="text" id="feat-name" placeholder="posoco_industrial_yoy" />
+        <input type="text" id="feat-name" placeholder="posoco_industrial_yoy · gst_eway_composite · railway_freight_composite" />
       </label>
       <label>
         <span>Ticker</span>
@@ -183,7 +184,8 @@
     <dl class="glossary">
       <dt>Factor</dt>
       <dd>A recipe that turns raw physical data into one comparable number
-          per company (e.g. year-on-year change in industrial power use).</dd>
+          per company &mdash; e.g. year-on-year change in industrial power
+          use, GST e-way-bill value, or rail freight loaded.</dd>
       <dt>Point-in-time</dt>
       <dd>Every read is filtered to what was public at a chosen date, so a
           backtest cannot accidentally use the future.</dd>

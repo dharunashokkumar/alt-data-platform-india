@@ -48,6 +48,35 @@ class Settings(BaseSettings):
     # cleaned historical archive without any code change.
     posoco_local_dir: str | None = None
 
+    # --- GST e-way bill source (monthly) ---
+    # GSTN / e-way-bill portal monthly statistics. {yyyy} {mm} placeholders.
+    # NOTE: GSTN portals change layout often — this is config precisely so a
+    # site change is an env edit, not a code change.
+    gst_report_url_template: str = Field(
+        default=(
+            "https://ewaybillgst.gov.in/Others/Statistics/"
+            "EWB_{yyyy}{mm}.xlsx"
+        )
+    )
+    # If set, reads `<dir>/gst_<yyyy-mm>.{xlsx,pdf,csv}` (real archived files).
+    gst_local_dir: str | None = None
+    # The monthly e-way-bill statistics are released ~12 days into the next
+    # month; published_date = month_end + this many days (PIT correctness).
+    gst_publication_lag_days: int = 12
+
+    # --- Indian Railways freight source (monthly) ---
+    railway_report_url_template: str = Field(
+        default=(
+            "https://www.indianrailways.gov.in/railwayboard/"
+            "uploads/directorate/stat_econ/Freight_{yyyy}{mm}.pdf"
+        )
+    )
+    # If set, reads `<dir>/railway_<yyyy-mm>.{pdf,csv}` (real archived files).
+    railway_local_dir: str | None = None
+    # Ministry-of-Railways monthly freight figures are released within ~3 days
+    # of month end; published_date = month_end + this many days.
+    railway_publication_lag_days: int = 3
+
     @property
     def pg_dsn(self) -> str:
         return (

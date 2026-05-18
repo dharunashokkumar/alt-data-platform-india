@@ -5,6 +5,6 @@ Importing this package imports every concrete source so that its
 module here and it is discoverable everywhere — no other code changes.
 """
 
-from adp.sources import posoco  # noqa: F401
+from adp.sources import gst, posoco, railway  # noqa: F401
 
-__all__ = ["posoco"]
+__all__ = ["posoco", "gst", "railway"]
