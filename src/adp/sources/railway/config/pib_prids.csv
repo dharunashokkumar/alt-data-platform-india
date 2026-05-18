@@ -1,0 +1,16 @@
+# PIB monthly-freight release manifest — a bibliography of REAL Press
+# Information Bureau document ids, NOT data. `adp backfill railway` fetches
+# each PIB page LIVE (https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=)
+# and parses the real commodity tonnage from it. Pinning the document id makes
+# the backfill deterministic / CI-stable instead of depending on a flaky,
+# bot-walled web search at runtime.
+#
+# To backfill another month: find that month's "Indian Railways ... freight
+# loading ... during <Month>, <Year>" release on pib.gov.in, add one line
+# below as `YYYY-MM,PRID`, and re-run `adp backfill railway`. Months not
+# listed here fall back to best-effort live search.
+#
+# month,prid
+2023-12,1993121
+2024-01,2001857
+2024-06,2030256

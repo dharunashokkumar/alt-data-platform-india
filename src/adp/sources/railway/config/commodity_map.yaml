@@ -13,13 +13,17 @@ aliases:
   "pig iron and finished steel": [Metals]
   "finished steel": [Metals]
   "iron and steel": [Metals]
+  "pig iron":    [Metals]                  # PIB short label variant
+  "raw material for steel": [Metals]       # RMSP
   "cement":      [Cement]
+  "clinker":     [Cement]                  # PIB lists clinker separately
   "limestone":   [Cement]
   "raw material for cement": [Cement]
   "fertiliser":  [Fertilizers]             # fertiliser / fertilisers
   "fertilizer":  [Fertilizers]
   "pol":         [Energy]                  # petroleum, oil & lubricants
   "petroleum":   [Energy]
+  "mineral oil": [Energy]                  # PIB label for POL traffic
   "container":   [Logistics]
   "containers":  [Logistics]
   "foodgrain":   [Logistics]               # bulk movement -> rail logistics

@@ -77,6 +77,42 @@ def backtest(
     typer.echo(res.summary())
 
 
+@app.command("backfill")
+def backfill(
+    source: str = typer.Argument(..., help="railway"),
+    start: str = typer.Option(..., help="YYYY-MM (inclusive)"),
+    end: str = typer.Option(..., help="YYYY-MM (inclusive)"),
+    out: str | None = typer.Option(
+        None, help="output dir (default: ADP_<SOURCE>_LOCAL_DIR)"
+    ),
+) -> None:
+    """Fetch real monthly history into the offline dir from public releases.
+
+    railway: scrapes PIB monthly freight press releases (no API key, no
+    synthetic data) into `<out>/railway_YYYY-MM.csv`, ready for
+    `adp ingest railway`.
+    """
+    from pathlib import Path
+
+    from adp.core.config import get_settings
+
+    if source != "railway":
+        raise typer.BadParameter(
+            f"backfill not implemented for '{source}' (only 'railway')"
+        )
+    from adp.sources.railway.backfill import backfill_railway
+
+    s = get_settings()
+    out_dir = Path(out or s.railway_local_dir or "data/railway")
+    sd = dt.date.fromisoformat(f"{start}-01")
+    ed = dt.date.fromisoformat(f"{end}-01")
+    written, skipped = backfill_railway(sd, ed, out_dir)
+    typer.echo(
+        f"backfilled {written} month(s) to {out_dir}"
+        + (f"; skipped {len(skipped)}: {', '.join(skipped)}" if skipped else "")
+    )
+
+
 def main() -> None:
     app()
 
