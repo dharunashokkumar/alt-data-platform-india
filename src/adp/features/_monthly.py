@@ -148,14 +148,21 @@ def build_feature_rows(
     _emit(accel, f"{prefix}_mom_accel")
 
     # Composite: standardize yoy & accel cross-sectionally per month, sum.
+    # Emit wherever the underlying YoY is defined. A legitimately-zero
+    # composite is a *neutral* cross-sectional reading (e.g. a thin month with
+    # one sector, or a sector exactly at the mean), NOT missing data — skipping
+    # zeros would silently empty the whole `*_composite` factor whenever the
+    # cross-section is thin. "No signal" is YoY-is-NaN, nothing else.
     mask = (yoy.index.date >= start) & (yoy.index.date <= end)
     for ts in yoy.index[mask]:
         z = _zscore(yoy.loc[ts]).fillna(0.0) + _zscore(accel.loc[ts]).fillna(
             0.0
         )
         for industry, val in z.items():
+            if pd.isna(yoy.loc[ts, industry]):
+                continue  # no 12-month base yet -> genuinely no signal
             published = pub.get((industry, ts))
-            if published is None or val == 0.0:
+            if published is None:
                 continue
             for ticker in s2t.get(industry, []):
                 rows.append(

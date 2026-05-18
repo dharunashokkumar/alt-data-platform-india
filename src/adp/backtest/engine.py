@@ -86,6 +86,18 @@ def run_backtest(
     if len(rebs) < 2:
         raise ValueError("need >= 2 monthly rebalance dates in range")
 
+    # Honest empty-state: a factor with no rows known by `end` would otherwise
+    # produce empty signals every rebalance and a misleading +0.00% / 0-period
+    # scorecard. Fail loudly with an actionable message instead. (Skipping the
+    # slow price fetch below when there is nothing to backtest is a bonus.)
+    if read_features(end, feature_name=factor).empty:
+        raise ValueError(
+            f"no '{factor}' features have been ingested yet (nothing public "
+            f"on or before {end.isoformat()}). Run the source pipeline first, "
+            f"e.g. `adp ingest <source> --start … --end …` then "
+            f"`adp features <source> --start … --end …`."
+        )
+
     prov = get_provider()
     prices = prov.daily_prices(
         tickers, rebs[0].date(), (rebs[-1] + pd.Timedelta(days=5)).date()
